@@ -1,0 +1,1 @@
+export const CRIANCA_CACHE_KEY = 'CRIANCA_CACHE_KEY'
