@@ -1,24 +1,23 @@
 import ListItemCrianca from "@/components/listitem/listitem-crianca";
 import ListaItemSkeleton from "@/components/skeleton/listitem";
-import { useCacheQuery } from "@/hooks/useCache";
-import { Familia } from "@/utils/schema";
+import useFamilia from "@/services/useFamilia";
 import { styles } from "@/utils/styles";
 import { router } from "expo-router";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 export default function TabIndex() {
-  const { data, loading, refetch } = useCacheQuery<Familia>(['familiasGet'], 'familiasGet')
+    const {criancas, carregandoFamilia, recarregarFamilia, recarregandoFamilia} = useFamilia()
 
-    if (loading) {
+    if (carregandoFamilia) {
         return <ListaItemSkeleton />
     }
 
     return <View style={styles.full}>
         <FlatList
-            data={Object.values(data?.criancas || {})}
+            data={criancas}
             keyExtractor={item => item}
-            refreshing={loading}
-            onRefresh={refetch}
+            refreshing={recarregandoFamilia}
+            onRefresh={recarregarFamilia}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             ListFooterComponent={() =>

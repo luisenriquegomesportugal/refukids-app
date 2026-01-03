@@ -5,14 +5,12 @@ import TiosSvg from "@/assets/images/icones/tios.svg";
 import LogoSvg from '@/assets/images/logo.svg';
 import TextSkeleton from "@/components/skeleton/text";
 import { useAuth } from "@/hooks/useAuth";
-import { useCacheQuery } from "@/hooks/useCache";
-import { Familia } from "@/utils/schema";
+import useFamilia from "@/services/useFamilia";
 import { styles } from '@/utils/styles';
-import { useQuery } from "@tanstack/react-query";
 import { Image } from 'expo-image';
 import { router, Tabs } from "expo-router";
 import { PropsWithChildren, useEffect } from 'react';
-import { ActivityIndicator, Animated, StyleSheet, Text, TouchableOpacity, useAnimatedValue, View, ViewStyle } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, useAnimatedValue, View, ViewStyle } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type PageBadgeViewProps = PropsWithChildren<{ style: Partial<ViewStyle> }>;
@@ -39,7 +37,7 @@ const PageBadgeView: React.FC<PageBadgeViewProps & { isFocused: number }> = prop
 
 export default function TabsLayout() {
   const { usuario } = useAuth()
-  const { data, loading } = useCacheQuery<Familia>(['familiasGet'], 'familiasGet')
+  const { familia, carregandoFamilia } = useFamilia()
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
@@ -72,9 +70,9 @@ export default function TabsLayout() {
             <>
               <Text style={styles.navLabel}>Família</Text>
               {
-                loading
+                carregandoFamilia
                   ? <TextSkeleton style={{ maxHeight: 36, maxWidth: '70%' }} />
-                  : <Text style={styles.navFamilia}>{data?.nome}</Text>
+                  : <Text style={styles.navFamilia}>{familia?.nome}</Text>
               }
               <View style={styles.menulist}>
                 {
